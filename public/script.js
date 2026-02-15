@@ -1,4 +1,4 @@
-const API = "https://try2-production-fcae.up.railway.app/";
+const API = "https://try2-production-c742.up.railway.app/";
 
 let coun = 0;
 const alarm = new Audio("alarm.mp3");

@@ -1,6 +1,5 @@
-// const API = "http://localhost:3000";
+const API = "http://localhost:3000";
 
-// const API = "https://try2-c0yp.onrender.com/"
 let coun = 0;
 const alarm = new Audio("alarm.mp3");
 let alertStocks = [];
@@ -23,7 +22,7 @@ async function loadStocks() {
 
     coun++;
 
-    const res = await fetch("/stocks");
+    const res = await fetch(API + "/stocks");
     const data = await res.json();
 
     const div = document.getElementById("stocks");
@@ -46,7 +45,7 @@ async function loadStocks() {
 /* ================= ALERT SECTION ================= */
 async function checkAlerts() {
 
-    const res = await fetch("/check-alerts");
+    const res = await fetch(API + "/check-alerts");
     const data = await res.json();
 
     alertStocks = data;
@@ -63,7 +62,7 @@ async function addStock() {
     let symbol = prompt("Enter Stock Symbol (Example: HCLTECH)");
     if (!symbol) return;
 
-    await fetch("/add-stock", {
+    await fetch(API + "/add-stock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symbol })
@@ -73,14 +72,14 @@ async function addStock() {
 }
 
 async function removeStock(name){
-    await fetch("/removeStock/" + name,{ method:"DELETE" });
+    await fetch(API + "/removeStock/" + name,{ method:"DELETE" });
     loadStocks();
 }
 
 /* ================= PORTFOLIO ================= */
 async function loadPortfolio() {
 
-    const res = await fetch("/portfolio");
+    const res = await fetch(API + "/portfolio");
     const data = await res.json();
 
     const div = document.getElementById("portfolio");
@@ -111,13 +110,13 @@ async function buyStock(name, price) {
         return;
     }
 
-    await fetch("/add-stock", {
+    await fetch(API + "/add-stock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symbol: name.replace(".NS","") })
     });
 
-    await fetch("/buy", {
+    await fetch(API + "/buy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, price })
@@ -137,14 +136,14 @@ function stopAlarm() {
 async function sellStock(name) {
 
     // Get portfolio first to calculate profit
-    const res = await fetch("/portfolio");
+    const res = await fetch(API + "/portfolio");
     const data = await res.json();
 
     const stock = data.find(s => s.name === name);
 
     if (stock) {
 
-        const currentPriceRes = await fetch("/stocks");
+        const currentPriceRes = await fetch(API + "/stocks");
         const stocksData = await currentPriceRes.json();
         const currentStock = stocksData.find(s => s.name === name);
 
@@ -156,7 +155,7 @@ async function sellStock(name) {
         }
     }
 
-    await fetch("/sell", {
+    await fetch(API + "/sell", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name })
@@ -222,7 +221,7 @@ async function loadMomentum3() {
 /* ================= MOMENTUM 5 SEC PRICE ================= */
 async function loadMomentum30Price(){
 
-    const res = await fetch("/momentum30price");
+    const res = await fetch(API + "/momentum30price");
     const data = await res.json();
 
     const div = document.getElementById("momentum30price");
@@ -246,7 +245,7 @@ async function loadMomentum30Price(){
 /* ================= MOMENTUM 10 SEC PRICE ================= */
 async function loadMomentum3Price(){
 
-    const res = await fetch("/momentum3minprice");
+    const res = await fetch(API + "/momentum3minprice");
     const data = await res.json();
     console.log("hii")
     const div = document.getElementById("momentum3price");

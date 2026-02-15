@@ -1,5 +1,5 @@
 // const API = "http://localhost:3000";
-// const API = "https://try2-c0yp.onrender.com/"
+const API = "https://try2-c0yp.onrender.com/"
 let coun = 0;
 const alarm = new Audio("alarm.mp3");
 let alertStocks = [];

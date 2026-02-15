@@ -77,32 +77,56 @@ print("Momentum stock list loaded:", len(stocks1))
 # -----------------------------
 # ⭐ BEST PRICE FETCH FUNCTION
 # -----------------------------
+# -----------------------------
+# ⭐ Groww API Price Fetch Function (SYNC VERSION)
+# -----------------------------
 def fetch_price(symbol):
 
     try:
-        ticker = yf.Ticker(symbol)
+        grow_symbol = symbol.replace(".NS", "")
 
-        # 1️⃣ Primary
-        price = ticker.info.get("currentPrice")
+        url = BASE_URL.format(grow_symbol)
 
-        # 2️⃣ Fallback
-        
-        if price is None:
-            # print("fail")
-            price = ticker.fast_info.get("last_price")
+        response = requests.get(url, timeout=3)
+        data = response.json()
 
-        # 3️⃣ Last fallback
-        if price is None:
-            # print("fail")
-            hist = ticker.history(period="1d")
-            if not hist.empty:
-                price = hist["Close"].iloc[-1]
-        # print(price)
-        return price
+        ltp_price = data.get("ltp")
+
+        if ltp_price:
+            return float(ltp_price)
+
+        return None
 
     except Exception as e:
-        print("Fetch error:", symbol, e)
+        print("Groww Fetch error:", symbol, e)
         return None
+
+# def fetch_price(symbol):
+
+#     try:
+#         ticker = yf.Ticker(symbol)
+
+#         # 1️⃣ Primary
+#         price = ticker.info.get("currentPrice")
+
+#         # 2️⃣ Fallback
+        
+#         if price is None:
+#             # print("fail")
+#             price = ticker.fast_info.get("last_price")
+
+#         # 3️⃣ Last fallback
+#         if price is None:
+#             # print("fail")
+#             hist = ticker.history(period="1d")
+#             if not hist.empty:
+#                 price = hist["Close"].iloc[-1]
+#         # print(price)
+#         return price
+
+#     except Exception as e:
+#         print("Fetch error:", symbol, e)
+#         return None
 
 
 # -----------------------------
@@ -242,12 +266,12 @@ def calculate_continuous_price_raise(cycles):
                 valid = False
                 break
 
-            diff = end_price - start_price
+            diff = (end_price - start_price)/start_price*100
 
             if diff < 0:   # ❌ if price falls, remove stock
                 valid = False
                 break
-
+            
             increases.append(diff)
 
         if valid and len(increases) > 0:
@@ -321,14 +345,14 @@ def calculate_static_price_raise(cycles):
             # % growth per cycle
             percent_change = ((end_price - start_price) / start_price) * 100
             # print(percent_change)
-            if percent_change < 0.07:   # ❌ minimum growth condition
+            if percent_change < 0:   # ❌ minimum growth condition
                 valid = False
                 break
             # valid = True
             # store absolute price increase
-            increases.append(end_price - start_price)
+            increases.append(percent_change)
             # print("hii")
-        if valid and len(increases) >= 0:
+        if valid and len(increases) > 0:
             # print("hii")
             avg_increase = sum(increases) / len(increases)
 
@@ -367,7 +391,7 @@ def momentum_scheduler():
         current_prices = loop.run_until_complete(fetch_all_prices_async())
 
         if not current_prices:
-            time.sleep(5)
+            time.sleep(2)
             continue
 
         # ⭐ STORE LAST 5 CYCLES FIRST
@@ -378,26 +402,27 @@ def momentum_scheduler():
 
         save_json("last_10_cycles.json", last_10_cycles)
 
-        # ⭐ 30 SEC MOMENTUM
+        #  SEC MOMENTUM
         if previous_prices:
-
+            #  heighest rate percent in last 1 sec
             temp_percent = calculate_momentum(previous_prices, current_prices)
             momentum_30_cache = temp_percent[:5]
 
-            # ✅ NOW calculate continuous increase
+            # ✅ NOW calculate continuous increase percent in last 5 sec
             momentum_30_price_cache = calculate_continuous_price_raise(last_10_cycles)
 
         previous_prices = current_prices
 
         # ⭐ 3 MIN MOMENTUM
         if len(last_10_cycles) == 5:
-
+            # heighest increase in last 5 sec
             momentum_3min_cache = calculate_static_momentum(last_10_cycles)
+            
             momentum_3min_price_cache = calculate_static_price_raise(last_10_cycles)
             # end_time = time.time()   # ⬅️ ADD HERE (end timer)
 
             # print("Loop execution time:", round(end_time - start_time, 2), "seconds")
-        # time.sleep(10)
+        time.sleep(1)
 
 
 
@@ -446,6 +471,8 @@ def get_stocks():
         })
         # print(result)
         # print(symbol)
+    # print("stockpr")    
+    # print(result)    
     return jsonify(result)
 
 
@@ -561,23 +588,13 @@ def check_alerts():
         # 🔴 CONDITION 1: STOP LOSS
         # -----------------------------
         # buy_price = stock["buy_price"]
-        stop_loss_price = buy_price - 3
+        stop_loss_price = buy_price*0.995
 
         # -----------------------------
         # 🔴 CONDITION 2: TRAILING STOP
         # -----------------------------
-        trailing_price = highest_price - 5
+        trailing_price = highest_price*0.993
 
-        # -----------------------------
-        # 🚨 ALARM CONDITIONS
-        # -----------------------------
-        # print("utkarsh")
-        # print(stop_loss_price)
-        # print(current_price)
-        # print("condition")
-        # print(current_price)
-        # print("2nd")
-        # print(stop_loss_price)
         if current_price <= stop_loss_price:
             # print(current_price)
             # print(stop_loss_price)

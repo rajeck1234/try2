@@ -10,38 +10,48 @@
 
 <body>
 
-<header>📈 Live Trading</header>
+<!-- ================= HEADER ================= -->
+<header class="top-header">
+    <div class="header-title">📈 Live Trading</div>
+    <div id="tradeSummary" class="trade-summary">
+        Orders: 0 | Profit: ₹0
+    </div>
+</header>
 
-<!-- ================= Momentum Sections ================= -->
+<!-- ================= MOMENTUM SECTIONS ================= -->
 
-<!-- 5 Sec Price Raise -->
 <div class="section-title">🔥 Top 5 Price Raise (5 Sec)</div>
 <div class="container" id="momentum30price"></div>
 
-<!-- 5 Sec Percentage Raise -->
 <div class="section-title">🔥 Top 5 Percentage Raise (5 Sec)</div>
 <div class="container" id="momentum30"></div>
 
-<!-- 10 Sec / 3 Min Price Raise -->
 <div class="section-title">🔥 Top 5 Price Raise (10 Sec)</div>
 <div class="container" id="momentum3price"></div>
 
-<!-- 10 Sec / 3 Min Percentage Raise -->
 <div class="section-title">🔥 Top 5 Percentage Raise (10 Sec)</div>
 <div class="container" id="momentum3"></div>
 
-<!-- ================= Add Stock ================= -->
-<div class="top-actions">
-<button class="add-btn" onclick="addStock()">➕ Add Stock</button>
+<!-- ================= ACTION + PORTFOLIO ROW ================= -->
+<div class="dual-section">
+
+    <!-- Add Stock Card -->
+    <div class="card-box">
+        <div class="card-title">➕ Add Stock</div>
+        <button class="add-btn" onclick="addStock()">Add Stock</button>
+    </div>
+
+    <!-- Portfolio Card -->
+    <div class="card-box">
+        <div class="card-title">💼 Your Portfolio</div>
+        <div id="portfolio"></div>
+    </div>
+
 </div>
 
-<!-- ================= Live Stocks ================= -->
+<!-- ================= LIVE STOCKS ================= -->
 <div class="section-title">📊 Live Stocks</div>
 <div class="container" id="stocks"></div>
-
-<!-- ================= Portfolio ================= -->
-<div class="section-title">💼 Your Portfolio</div>
-<div class="container" id="portfolio"></div>
 
 <button id="stopAlarm" class="stop-btn" onclick="stopAlarm()">Stop Alarm</button>
 

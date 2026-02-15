@@ -1,4 +1,4 @@
-/* ---------- Global ---------- */
+/* ---------- GLOBAL ---------- */
 body {
     margin: 0;
     font-family: system-ui, -apple-system, sans-serif;
@@ -6,32 +6,40 @@ body {
     color: white;
 }
 
-/* ---------- Header ---------- */
-header {
-    text-align: center;
-    padding: 10px;
+/* ---------- HEADER ---------- */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
     background-color: #1e293b;
     font-size: 18px;
     font-weight: bold;
 }
 
-/* ---------- Section Title ---------- */
+.trade-summary {
+    font-size: 13px;
+    font-weight: normal;
+    color: #22c55e;
+}
+
+/* ---------- SECTION TITLE ---------- */
 .section-title {
-    padding: 8px 14px;
+    padding: 10px 16px;
     font-size: 15px;
     font-weight: bold;
 }
 
-/* ---------- Container ---------- */
+/* ---------- CONTAINER ---------- */
 .container {
-    padding: 6px 10px;
+    padding: 6px 12px;
 }
 
-/* ---------- Stock Card ---------- */
+/* ---------- STOCK CARD ---------- */
 .stock {
     background-color: #1e293b;
     border-radius: 10px;
-    padding: 8px 10px;
+    padding: 8px 12px;
     margin-bottom: 8px;
 
     display: flex;
@@ -41,40 +49,34 @@ header {
     font-size: 13px;
 }
 
-/* ---------- Stock Text ---------- */
-.stock span {
-    margin-right: 8px;
-    white-space: nowrap;
+/* ---------- ALERT STYLE ---------- */
+.stock.alert-stock {
+    border-left: 4px solid red;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- BUTTONS ---------- */
 button {
     border: none;
-    padding: 5px 10px;
+    padding: 6px 10px;
     border-radius: 6px;
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
 }
 
-/* Buy Button */
+/* Buy */
 .buy {
     background-color: #22c55e;
     color: white;
 }
 
-/* Sell Button */
+/* Sell Alert */
 .sell-alert {
     background-color: red !important;
     color: white !important;
 }
 
-/* ---------- Alert Row ---------- */
-.stock.alert-stock {
-    border-left: 4px solid red;
-}
-
-/* ---------- Add Button ---------- */
+/* Add Stock Button */
 .add-btn {
     width: 100%;
     background-color: #3b82f6;
@@ -84,7 +86,31 @@ button {
     font-size: 14px;
 }
 
-/* ---------- Stop Alarm ---------- */
+.add-btn:hover {
+    background-color: #2563eb;
+}
+
+/* ---------- DUAL SECTION (Add + Portfolio) ---------- */
+.dual-section {
+    display: flex;
+    gap: 12px;
+    padding: 10px 12px;
+}
+
+.card-box {
+    flex: 1;
+    background-color: #1e293b;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.card-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* ---------- STOP ALARM ---------- */
 .stop-btn {
     position: fixed;
     bottom: 15px;
@@ -95,8 +121,9 @@ button {
     border-radius: 10px;
 }
 
-/* ---------- Smooth Mobile Scroll ---------- */
-body {
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+/* ---------- MOBILE RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .dual-section {
+        flex-direction: column;
+    }
 }

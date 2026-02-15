@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "name": "INFY.NS",
+    "buy_price": 1369.1,
+    "target_price": 1369.1,
+    "highest_price": 1369.1,
+    "alert_triggered": false
+  },
+  {
+    "name": "INFY.NS",
+    "buy_price": 1369.1,
+    "target_price": 1369.1,
+    "highest_price": 1369.1,
+    "alert_triggered": false
+  }
+]

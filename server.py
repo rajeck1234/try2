@@ -384,13 +384,14 @@ def momentum_scheduler():
         previous_prices = {}
     coun = 0
     while True:
-        
+        # start_time = time.time() 
         coun += 1
         # print(coun)
 
         current_prices = loop.run_until_complete(fetch_all_prices_async())
 
         if not current_prices:
+            print("Sleep")
             time.sleep(2)
             continue
 
@@ -410,15 +411,16 @@ def momentum_scheduler():
 
             # ✅ NOW calculate continuous increase percent in last 5 sec
             momentum_30_price_cache = calculate_continuous_price_raise(last_10_cycles)
-
+            # print(momentum_30_price_cache)
         previous_prices = current_prices
-
+        # print()
         # ⭐ 3 MIN MOMENTUM
         if len(last_10_cycles) == 5:
             # heighest increase in last 5 sec
             momentum_3min_cache = calculate_static_momentum(last_10_cycles)
             
             momentum_3min_price_cache = calculate_static_price_raise(last_10_cycles)
+            
             # end_time = time.time()   # ⬅️ ADD HERE (end timer)
 
             # print("Loop execution time:", round(end_time - start_time, 2), "seconds")
@@ -588,20 +590,29 @@ def check_alerts():
         # 🔴 CONDITION 1: STOP LOSS
         # -----------------------------
         # buy_price = stock["buy_price"]
-        stop_loss_price = buy_price*0.995
+        stop_loss_price = buy_price
 
         # -----------------------------
         # 🔴 CONDITION 2: TRAILING STOP
         # -----------------------------
-        trailing_price = highest_price*0.993
-
-        if current_price <= stop_loss_price:
+        trailing_price = highest_price
+        # print("cycle")
+        # print(trailing_price)
+        # print(stop_loss_price)
+        # print(highest_price)
+        if current_price < stop_loss_price:
             # print(current_price)
             # print(stop_loss_price)
             # print(f"🚨 STOP LOSS HIT: {symbol}")
+            # print("current price")
+            # print(stop_loss_price)
             alerts.append(symbol)
 
-        elif current_price <= trailing_price:
+        if current_price < trailing_price:
+            # print("trailing_price")
+            # print(trailing_price)
+            # print("current_price")
+            # print(current_price)
             # print(f"🚨 TRAILING STOP HIT: {symbol}")
             alerts.append(symbol)
 

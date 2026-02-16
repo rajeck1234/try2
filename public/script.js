@@ -146,6 +146,10 @@ async function sellStock(name) {
         const currentPriceRes = await fetch(API + "/stocks");
         const stocksData = await currentPriceRes.json();
         const currentStock = stocksData.find(s => s.name === name);
+        // console.log("buy");
+        // console.log(currentStock);
+        // console.log("sell");
+        // console.log(stock.buy_price);
 
         if (currentStock) {
             const profit = (currentStock.price ?? 0) - (stock.buy_price ?? 0);
@@ -247,12 +251,12 @@ async function loadMomentum3Price(){
 
     const res = await fetch(API + "/momentum3minprice");
     const data = await res.json();
-    console.log("hii")
+    // console.log("hii")
     const div = document.getElementById("momentum3price");
     div.innerHTML = "";
 
     data.forEach(stock=>{
-        console.log(stock)
+        // console.log(stock)
         div.innerHTML += `
         <div class="stock">
             <div style="flex:1;">
@@ -268,12 +272,12 @@ async function loadMomentum3Price(){
 }
 
 /* ================= INTERVALS ================= */
-setInterval(loadMomentum30Price,10000);
-setInterval(loadMomentum3Price,10000);
-setInterval(loadMomentum30,10000);
-setInterval(loadMomentum3,10000);
+setInterval(loadMomentum30Price,1000);
+setInterval(loadMomentum3Price,1000);
+setInterval(loadMomentum30,1000);
+setInterval(loadMomentum3,1000);
 setInterval(loadStocks, 1000);
-setInterval(checkAlerts, 5000);
+setInterval(checkAlerts, 1000);
 
 loadMomentum30();
 loadMomentum3();
